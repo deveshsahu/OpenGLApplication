@@ -10,6 +10,7 @@ public:
 	void run();
 
 	static void onWindowResized(GLFWwindow*, int, int);
+	static void onCheckError(int error, const char* description);
 private:
 	void myInitWindow();
 	void myMainLoop();

@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "Window.h"
+#include <assert.h>
+#include <iostream>
 
 #define WIDTH 800
 #define HEIGHT 600
@@ -17,15 +19,22 @@ void Window::onWindowResized(GLFWwindow * window, int width, int height)
 	app->myResizeCallback(width, height);
 }
 
+void Window::onCheckError(int error, const char * description)
+{
+	std::cout << "ERROR: " << description << std::endl;
+}
+
 void Window::myInitWindow()
 {
-	glfwInit();
+	glfwSetErrorCallback(onCheckError);
+	if (!glfwInit())
+		exit(EXIT_FAILURE);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
-	glfwWindowHint(GLFW_OPENGL_ANY_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
-	myGLWindow = (glfwCreateWindow(WIDTH, HEIGHT, "OpenGL Window", nullptr, nullptr));
-
+	//glfwWindowHint(GLFW_OPENGL_ANY_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	//glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+	myGLWindow = glfwCreateWindow(WIDTH, HEIGHT, "OpenGL Window", nullptr, nullptr);
+	assert(myGLWindow != nullptr);
 	glfwSetWindowUserPointer(myGLWindow, this);
 	glfwSetWindowSizeCallback(myGLWindow, Window::onWindowResized);
 }
