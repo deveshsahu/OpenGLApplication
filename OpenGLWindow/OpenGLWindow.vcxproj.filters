@@ -42,6 +42,15 @@
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\Resources\utils.h">
+      <Filter>Graphics\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphics\ShaderLibrary.h">
+      <Filter>Graphics\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Graphics\opengl.h">
+      <Filter>Graphics\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -56,6 +65,9 @@
     <ClCompile Include="..\Graphics\Graphics.cpp">
       <Filter>Graphics\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\Graphics\ShaderLibrary.cpp">
+      <Filter>Graphics\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OpenGLWindow.rc">
@@ -63,11 +75,14 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\Resources\Shader\simple.fs.txt">
+    <Text Include="..\Resources\Shader\simple.fs">
       <Filter>Graphics\Resources\Shaders</Filter>
     </Text>
-    <Text Include="..\Resources\Shader\simple.vs.txt">
+    <Text Include="..\Resources\Shader\simple.vs">
       <Filter>Graphics\Resources\Shaders</Filter>
+    </Text>
+    <Text Include="..\Resources\utils.cpp">
+      <Filter>Graphics\Resources</Filter>
     </Text>
   </ItemGroup>
 </Project>
