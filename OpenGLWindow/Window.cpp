@@ -1,5 +1,5 @@
-#include "pch.h"
 #include "Window.h"
+#include "../Graphics/Graphics.h"
 #include <assert.h>
 #include <iostream>
 
@@ -37,6 +37,8 @@ void Window::myInitWindow()
 	assert(myGLWindow != nullptr);
 	glfwSetWindowUserPointer(myGLWindow, this);
 	glfwSetWindowSizeCallback(myGLWindow, Window::onWindowResized);
+	auto renderer = Graphics::OpenGLGraphics::getInstance();
+
 }
 
 void Window::myResizeCallback(int width, int height)

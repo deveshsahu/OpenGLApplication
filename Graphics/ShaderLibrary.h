@@ -2,6 +2,7 @@
 #include "opengl.h"
 #include <vector>
 #include <string>
+#include <memory>
 
 enum SHADER_TYPE
 {
@@ -26,6 +27,8 @@ struct Shader
 	{}
 };
 
+using ShaderSPtr = std::shared_ptr<Shader>;
+
 class ShaderLibrary
 {
 public:
@@ -33,7 +36,8 @@ public:
 	~ShaderLibrary() = default;
 
 	void addShaderFromFile(const std::string& name, const std::string& filePath, SHADER_TYPE type);
+	ShaderSPtr getShader(const std::string& name);
 
 private:
-	std::vector<Shader> m_ShaderList;
+	std::vector<ShaderSPtr> m_ShaderList;
 };

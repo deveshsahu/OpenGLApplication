@@ -5,11 +5,13 @@
 
 ShaderLibrary::ShaderLibrary()
 {
-
+	// Load shaders
+	addShaderFromFile("SimpleVertex", "../Resources/Shader/simple.vs", SHADER_TYPE::VERT);
+	addShaderFromFile("SimpleFragment", "../Resource/Shader/simple.fs", SHADER_TYPE::FRAG);
 
 }
 
-void ShaderLibrary::addShaderFromFile(const std::string& name, const std::string & filePath, SHADER_TYPE type)
+void ShaderLibrary::addShaderFromFile(const std::string& name, const std::string& filePath, SHADER_TYPE type)
 {
 	if (type >= SHADER_TYPE::SIZE)
 	{
@@ -48,5 +50,15 @@ void ShaderLibrary::addShaderFromFile(const std::string& name, const std::string
 		}
 		return;
 	}
-	m_ShaderList.emplace_back(id, type, name);
+	m_ShaderList.emplace_back(std::make_shared<Shader>(id, type, name));
+}
+
+ShaderSPtr ShaderLibrary::getShader(const std::string& name)
+{
+	for (auto shader : m_ShaderList)
+	{
+		if (shader->m_name == name)
+			return shader;
+	}
+	return ;
 }
