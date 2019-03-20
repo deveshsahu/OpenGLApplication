@@ -1,19 +1,10 @@
 #pragma once
-#include "opengl.h"
+#include "GLUtils.h"
 #include <vector>
 #include <string>
 #include <memory>
 
-enum SHADER_TYPE
-{
-	VERT,	// Vertex Shader
-	FRAG,	// Fragment Shader
-	TESC,	// Tessellation Compute Shader
-	TESE,	// Tessallation Evaluation Shader
-	COMP,	// Compute Shader
-	GEOM,	// Geometry Shader
-	SIZE
-};
+using namespace GLUtils;
 
 struct Shader
 {
@@ -37,6 +28,8 @@ public:
 
 	void addShaderFromFile(const std::string& name, const std::string& filePath, SHADER_TYPE type);
 	ShaderSPtr getShader(const std::string& name);
+
+	void initializeDefaultShaders();
 
 private:
 	std::vector<ShaderSPtr> m_ShaderList;

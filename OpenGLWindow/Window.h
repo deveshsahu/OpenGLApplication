@@ -1,4 +1,5 @@
 #pragma once
+#include "gl_core_4_5.h"
 #include <GLFW/glfw3.h>
 #include <memory>
 class Window

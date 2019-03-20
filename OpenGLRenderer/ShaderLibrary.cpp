@@ -1,30 +1,27 @@
 #include "ShaderLibrary.h"
-
 #include "../Resources/utils.h"
 #include <iostream>
 
 ShaderLibrary::ShaderLibrary()
 {
-	// Load shaders
-	addShaderFromFile("SimpleVertex", "../Resources/Shader/simple.vs", SHADER_TYPE::VERT);
-	addShaderFromFile("SimpleFragment", "../Resource/Shader/simple.fs", SHADER_TYPE::FRAG);
-
+	
 }
 
 void ShaderLibrary::addShaderFromFile(const std::string& name, const std::string& filePath, SHADER_TYPE type)
 {
-	if (type >= SHADER_TYPE::SIZE)
+	if (type >= SHADER_TYPE::NUM)
 	{
 		std::cerr << "ERROR: Incorrect shader type\n";
 		return;
 	}
-	auto sourceCode = loadFile(filePath);
+	auto sourceCode = utils::loadFile(filePath);
 	if (sourceCode.empty())
 	{
 		std::cerr << "ERROR: Could not find shader file \"" << filePath << "\"" << std::endl;
 		return;
 	}
-	auto id = glCreateShader(type);
+
+	auto id = glCreateShader(getShaderEnum(type));
 	if (id == 0)
 	{
 		std::cerr << "ERROR: glCreateShader returned 0\n";
@@ -60,5 +57,12 @@ ShaderSPtr ShaderLibrary::getShader(const std::string& name)
 		if (shader->m_name == name)
 			return shader;
 	}
-	return ;
+	return ShaderSPtr();
+}
+
+void ShaderLibrary::initializeDefaultShaders()
+{
+	// Load shaders
+	addShaderFromFile("SimpleVertex", "Shader/simple.vs", SHADER_TYPE::VERT);
+	addShaderFromFile("SimpleFragment", "Shader/simple.fs", SHADER_TYPE::FRAG);
 }

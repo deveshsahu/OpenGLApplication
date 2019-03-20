@@ -3,7 +3,8 @@
 
 namespace Graphics
 {
-	OpenGLGraphics::OpenGLGraphics()
+	OpenGLGraphics::OpenGLGraphics():
+		m_Triangle("triangle")
 	{
 	}
 
@@ -11,20 +12,38 @@ namespace Graphics
 	{
 	}
 
-	OpenGLGraphics * OpenGLGraphics::getInstance()
+	OpenGLGraphics& OpenGLGraphics::getInstance()
 	{
-		if (!m_GraphicsRenderer)
-			m_GraphicsRenderer = new OpenGLGraphics();
-		return m_GraphicsRenderer;
+		static OpenGLGraphics instance;
+		return instance;
 	}
 
 	void OpenGLGraphics::initAllPrograms()
 	{
+		m_ShaderLibrary.initializeDefaultShaders();
 		// SIMPLE
-		std::vector<std::string> simpleSL(SHADER_TYPE::SIZE);
+		std::vector<std::string> simpleSL(SHADER_TYPE::NUM);
 		simpleSL[VERT] = "SimpleVertex";
 		simpleSL[FRAG] = "SimpleFragment";
-		m_Programs.push_back(std::pair<std::string, GLuint>("Simple", m_InitProgram(simpleSL)));
+		m_Programs["Simple"] = m_InitProgram(simpleSL);
+	}
+
+	void OpenGLGraphics::init()
+	{
+		initAllPrograms();
+		glViewport(0, 0, 512, 512);
+	}
+
+	void OpenGLGraphics::render()
+	{
+		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+		glUseProgram(m_Programs["Simple"]);
+		m_Triangle.render();
+	}
+
+	void OpenGLGraphics::resize(int width, int height)
+	{
+		glViewport(0, 0, width, height);
 	}
 
 	GLuint OpenGLGraphics::m_InitProgram(std::vector<std::string>& shaderList)

@@ -1,6 +1,6 @@
 #version 450
 
-out vec3 outColorfs
+out vec4 outColorfs;
 
 void main()
 {

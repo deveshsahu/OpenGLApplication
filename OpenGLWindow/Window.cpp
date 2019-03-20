@@ -1,5 +1,5 @@
 #include "Window.h"
-#include "../Graphics/Graphics.h"
+#include "Graphics.h"
 #include <assert.h>
 #include <iostream>
 
@@ -37,19 +37,33 @@ void Window::myInitWindow()
 	assert(myGLWindow != nullptr);
 	glfwSetWindowUserPointer(myGLWindow, this);
 	glfwSetWindowSizeCallback(myGLWindow, Window::onWindowResized);
-	auto renderer = Graphics::OpenGLGraphics::getInstance();
 
+	//glDebugMessageCallback(GLUtils::debugCallback, NULL);
+	/*glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, NULL, GL_TRUE);
+	glDebugMessageInsert(GL_DEBUG_SOURCE_APPLICATION, GL_DEBUG_TYPE_MARKER, 0,
+		GL_DEBUG_SEVERITY_NOTIFICATION, -1, "Start debugging");*/
+	glfwMakeContextCurrent(myGLWindow);
+	ogl_LoadFunctions();
+
+	Graphics::OpenGLGraphics::getInstance().init();
 }
 
 void Window::myResizeCallback(int width, int height)
 {
-	//glViewport(0, 0, width, height);
+	Graphics::OpenGLGraphics::getInstance().resize(width, height);
 }
 
 void Window::myMainLoop()
 {
 	while (!glfwWindowShouldClose(myGLWindow))
 	{
+		glViewport(0, 0, WIDTH, HEIGHT);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		glClearColor(0.f, 0.0, 0, 1.0);
+		Graphics::OpenGLGraphics::getInstance().render();
+
+		glfwSwapBuffers(myGLWindow);
 		glfwPollEvents();
 	}
 
