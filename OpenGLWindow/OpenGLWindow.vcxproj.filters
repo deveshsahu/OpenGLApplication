@@ -13,61 +13,56 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Graphics">
-      <UniqueIdentifier>{c67b8e09-019d-412d-996e-77c5a26f3eba}</UniqueIdentifier>
+    <Filter Include="Model">
+      <UniqueIdentifier>{64f5ce9e-17a4-4c47-ad49-c9bb6b51c80a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Graphics\Header Files">
-      <UniqueIdentifier>{844098a5-ba21-4568-b3a5-391e3beafba3}</UniqueIdentifier>
+    <Filter Include="Model\Header Files">
+      <UniqueIdentifier>{12f98cda-8a57-450c-9071-8218cfa42d22}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Graphics\Source Files">
-      <UniqueIdentifier>{6fe23267-f138-475e-a54b-f3fed06e5738}</UniqueIdentifier>
+    <Filter Include="Model\Source Files">
+      <UniqueIdentifier>{1b819b1f-e764-458e-b98d-a60ae6333826}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Graphics\Resources">
-      <UniqueIdentifier>{eb715da6-6072-43cd-aacc-3be1fdb9fe3b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Graphics\Resources\Shaders">
-      <UniqueIdentifier>{9711a39d-0b2d-4f5a-91cb-438bc33d837b}</UniqueIdentifier>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{63a540e8-843f-4924-85e0-23e75a44b167}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="pch.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Window.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Graphics\Graphics.h">
-      <Filter>Graphics\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\Model\Model.h">
+      <Filter>Model\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Model\TeapotModel.h">
+      <Filter>Model\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Resources\utils.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="pch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="OpenGLWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Graphics\Graphics.cpp">
-      <Filter>Graphics\Source Files</Filter>
+    <ClCompile Include="..\Model\Model.cpp">
+      <Filter>Model\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Model\TeapotModel.cpp">
+      <Filter>Model\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Resources\utils.cpp">
+      <Filter>Resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OpenGLWindow.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\Resources\Shader\simple.fs.txt">
-      <Filter>Graphics\Resources\Shaders</Filter>
-    </Text>
-    <Text Include="..\Resources\Shader\simple.vs.txt">
-      <Filter>Graphics\Resources\Shaders</Filter>
-    </Text>
   </ItemGroup>
 </Project>
