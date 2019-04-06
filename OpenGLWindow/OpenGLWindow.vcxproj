@@ -168,7 +168,8 @@
     <ClInclude Include="..\Model\TeapotModel.h" />
     <ClInclude Include="..\Resources\utils.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Window.h" />
+    <ClInclude Include="MainWindow.h" />
+    <ClInclude Include="SceneView.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Model\Model.cpp">
@@ -180,10 +181,10 @@
     <ClCompile Include="..\Resources\utils.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="OpenGLWindow.cpp">
+    <ClCompile Include="Application.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Window.cpp">
+    <ClCompile Include="MainWindow.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>

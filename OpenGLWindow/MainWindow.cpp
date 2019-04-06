@@ -1,30 +1,33 @@
-#include "Window.h"
+#include "MainWindow.h"
 #include "Graphics.h"
+#include "Scene.h"
 #include <assert.h>
 #include <iostream>
 
-#define WIDTH 800
-#define HEIGHT 600
+static const int WIDTH = 800;
+static const int HEIGHT = 600;
 
-void Window::run()
+std::weak_ptr<Graphics::Scene> MainWindow::m_ActiveScene;
+
+void MainWindow::run()
 {
 	myInitWindow();
 	myMainLoop();
 	myCleanup();
 }
 
-void Window::onWindowResized(GLFWwindow * window, int width, int height)
+void MainWindow::onWindowResized(GLFWwindow * window, int width, int height)
 {
-	auto app = reinterpret_cast<Window*>(window);
-	app->myResizeCallback(width, height);
+	if (auto scene = m_ActiveScene.lock())
+		scene->resize(width, height);
 }
 
-void Window::onCheckError(int error, const char * description)
+void MainWindow::onCheckError(int error, const char * description)
 {
 	std::cout << "ERROR: " << description << std::endl;
 }
 
-void Window::myInitWindow()
+void MainWindow::myInitWindow()
 {
 	glfwSetErrorCallback(onCheckError);
 	if (!glfwInit())
@@ -33,10 +36,10 @@ void Window::myInitWindow()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 	//glfwWindowHint(GLFW_OPENGL_ANY_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	//glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
-	myGLWindow = glfwCreateWindow(WIDTH, HEIGHT, "OpenGL Window", nullptr, nullptr);
+	myGLWindow = glfwCreateWindow(WIDTH, HEIGHT, "Main Window", nullptr, nullptr);
 	assert(myGLWindow != nullptr);
 	glfwSetWindowUserPointer(myGLWindow, this);
-	glfwSetWindowSizeCallback(myGLWindow, Window::onWindowResized);
+	glfwSetWindowSizeCallback(myGLWindow, MainWindow::onWindowResized);
 
 	//glDebugMessageCallback(GLUtils::debugCallback, NULL);
 	/*glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, NULL, GL_TRUE);
@@ -45,31 +48,27 @@ void Window::myInitWindow()
 	glfwMakeContextCurrent(myGLWindow);
 	ogl_LoadFunctions();
 
-	Graphics::OpenGLGraphics::getInstance().init();
+	auto& systemGraphics = Graphics::OpenGLGraphics::getInstance();
+	systemGraphics.createNewScene(WIDTH, HEIGHT);
+	auto scene = systemGraphics.getScene();
+	m_ActiveScene = scene;
+	scene->init();
 }
 
-void Window::myResizeCallback(int width, int height)
+void MainWindow::myMainLoop()
 {
-	Graphics::OpenGLGraphics::getInstance().resize(width, height);
-}
-
-void Window::myMainLoop()
-{
+	auto scene = m_ActiveScene.lock();
 	while (!glfwWindowShouldClose(myGLWindow))
 	{
-		glViewport(0, 0, WIDTH, HEIGHT);
-		glClear(GL_COLOR_BUFFER_BIT);
-
-		glClearColor(0.f, 0.0, 0, 1.0);
-		Graphics::OpenGLGraphics::getInstance().render();
-
+		if (scene)
+			scene->render();
 		glfwSwapBuffers(myGLWindow);
-		glfwPollEvents();
+		glfwWaitEvents();
 	}
 
 }
 
-void Window::myCleanup()
+void MainWindow::myCleanup()
 {
 	glfwDestroyWindow(myGLWindow);
 	glfwTerminate();

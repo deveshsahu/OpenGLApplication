@@ -2,67 +2,77 @@
 #include "../Resources/utils.h"
 #include <iostream>
 
-ShaderLibrary::ShaderLibrary()
+namespace Graphics
 {
-	
-}
-
-void ShaderLibrary::addShaderFromFile(const std::string& name, const std::string& filePath, SHADER_TYPE type)
-{
-	if (type >= SHADER_TYPE::NUM)
+	ShaderLibrary & ShaderLibrary::getInstance()
 	{
-		std::cerr << "ERROR: Incorrect shader type\n";
-		return;
-	}
-	auto sourceCode = utils::loadFile(filePath);
-	if (sourceCode.empty())
-	{
-		std::cerr << "ERROR: Could not find shader file \"" << filePath << "\"" << std::endl;
-		return;
+		static ShaderLibrary shaderLibrary;
+		return shaderLibrary;
 	}
 
-	auto id = glCreateShader(getShaderEnum(type));
-	if (id == 0)
+	void ShaderLibrary::addShaderFromFile(const std::string& name, const std::string& filePath, SHADER_TYPE type)
 	{
-		std::cerr << "ERROR: glCreateShader returned 0\n";
-		return;
-	}
-	GLchar* shaderSource[] = { sourceCode.data() };
-	glShaderSource(id, 1, shaderSource, NULL);
-	glCompileShader(id);
-	GLint result;
-	glGetShaderiv(id, GL_COMPILE_STATUS, &result);
-	if (result == GL_FALSE)
-	{
-		std::cerr << "ERROR: Shader compilation failed\n";
-		GLint logLen;
-		glGetShaderiv(id, GL_INFO_LOG_LENGTH, &logLen);
-		if (logLen > 0)
+		if (type >= SHADER_TYPE::NUM)
 		{
-			char* log = new char[logLen];
-			GLsizei written;
-			glGetShaderInfoLog(id, logLen, &written, log);
-			std::cout << "INFO: " << log << std::endl;
-			delete[] log;
+			std::cerr << "ERROR: Incorrect shader type\n";
+			return;
 		}
-		return;
-	}
-	m_ShaderList.emplace_back(std::make_shared<Shader>(id, type, name));
-}
+		auto sourceCode = utils::loadFile(filePath);
+		if (sourceCode.empty())
+		{
+			std::cerr << "ERROR: Could not find shader file \"" << filePath << "\"" << std::endl;
+			return;
+		}
 
-ShaderSPtr ShaderLibrary::getShader(const std::string& name)
-{
-	for (auto shader : m_ShaderList)
+		auto id = glCreateShader(getShaderEnum(type));
+		if (id == 0)
+		{
+			std::cerr << "ERROR: glCreateShader returned 0\n";
+			return;
+		}
+		GLchar* shaderSource[] = { sourceCode.data() };
+		glShaderSource(id, 1, shaderSource, NULL);
+		glCompileShader(id);
+		GLint result;
+		glGetShaderiv(id, GL_COMPILE_STATUS, &result);
+		if (result == GL_FALSE)
+		{
+			std::cerr << "ERROR: Shader compilation failed\n";
+			GLint logLen;
+			glGetShaderiv(id, GL_INFO_LOG_LENGTH, &logLen);
+			if (logLen > 0)
+			{
+				char* log = new char[logLen];
+				GLsizei written;
+				glGetShaderInfoLog(id, logLen, &written, log);
+				std::cout << "INFO: " << log << std::endl;
+				delete[] log;
+			}
+			return;
+		}
+		m_ShaderList.emplace_back(std::make_shared<Shader>(id, type, name));
+	}
+
+	std::shared_ptr<Shader> ShaderLibrary::getShader(const std::string& name)
 	{
-		if (shader->m_name == name)
-			return shader;
+		for (auto shader : m_ShaderList)
+		{
+			if (shader->m_name == name)
+				return shader;
+		}
+		return std::shared_ptr<Shader>();
 	}
-	return ShaderSPtr();
-}
 
-void ShaderLibrary::initializeDefaultShaders()
-{
-	// Load shaders
-	addShaderFromFile("SimpleVertex", "Shader/simple.vs", SHADER_TYPE::VERT);
-	addShaderFromFile("SimpleFragment", "Shader/simple.fs", SHADER_TYPE::FRAG);
+	void ShaderLibrary::initializeDefaultShaders()
+	{
+		// Load shaders
+		addShaderFromFile("SimpleVertex", "Shader/simple.vs", SHADER_TYPE::VERT);
+		addShaderFromFile("SimpleFragment", "Shader/simple.fs", SHADER_TYPE::FRAG);
+		addShaderFromFile("BackgroundVertex", "Shader/background.vs", SHADER_TYPE::VERT);
+		addShaderFromFile("BackgroundFragment", "Shader/background.fs", SHADER_TYPE::FRAG);
+	}
+	ShaderLibrary::ShaderLibrary()
+	{
+		initializeDefaultShaders();
+	}
 }

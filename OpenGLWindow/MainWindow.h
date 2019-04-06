@@ -2,11 +2,18 @@
 #include "gl_core_4_5.h"
 #include <GLFW/glfw3.h>
 #include <memory>
-class Window
+#include <unordered_map>
+
+namespace Graphics
+{
+	class Scene;
+}
+
+class MainWindow
 {
 public:
-	Window() = default;
-	~Window() = default;
+	MainWindow() = default;
+	~MainWindow() = default;
 
 	void run();
 
@@ -17,9 +24,9 @@ private:
 	void myMainLoop();
 	void myCleanup();
 
-	void myResizeCallback(int, int);
-
 private:
 	GLFWwindow* myGLWindow;
+	//static std::unordered_map<GLFWwindow*, Graphics::
+	static std::weak_ptr<Graphics::Scene> m_ActiveScene;
 };
 

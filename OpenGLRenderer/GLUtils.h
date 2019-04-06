@@ -3,6 +3,7 @@
 
 namespace GLUtils
 {
+	static const unsigned INVALID = ~0;
 	enum SHADER_TYPE
 	{
 		VERT,	// Vertex Shader

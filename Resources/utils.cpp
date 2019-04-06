@@ -1,5 +1,7 @@
 #pragma once
 #include "utils.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 #include <fstream>
 
 namespace utils
@@ -18,5 +20,11 @@ namespace utils
 		fs.close();
 		content.push_back('\0'); // Null terminate the string
 		return content;
+	}
+
+	uint8_t* loadImageFile(const std::string & file, int& width, int & height)
+	{
+		int bpp;
+		return stbi_load("file", &width, &height, &bpp, 3);
 	}
 }
