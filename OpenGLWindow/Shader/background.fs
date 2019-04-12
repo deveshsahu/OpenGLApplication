@@ -1,8 +1,15 @@
 #version 450
 
-out vec4 outColorfs;
+in VS_OUT
+{
+ vec2 texCoord;
+}fs_in;
+
+layout (binding = 0) uniform sampler2D bkgImage;
+
+out vec4 color;
 
 void main()
 {
-	outColorfs = vec4(1.0, 0.0, 0.0, 1.0);
+	color = texture(bkgImage, fs_in.texCoord);
 }

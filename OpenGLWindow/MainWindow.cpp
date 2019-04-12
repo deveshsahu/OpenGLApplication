@@ -1,6 +1,7 @@
 #include "MainWindow.h"
 #include "Graphics.h"
 #include "Scene.h"
+#include "GLUtils.h"
 #include <assert.h>
 #include <iostream>
 
@@ -18,6 +19,7 @@ void MainWindow::run()
 
 void MainWindow::onWindowResized(GLFWwindow * window, int width, int height)
 {
+	glViewport(0, 0, width, height);
 	if (auto scene = m_ActiveScene.lock())
 		scene->resize(width, height);
 }
@@ -35,24 +37,30 @@ void MainWindow::myInitWindow()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 	//glfwWindowHint(GLFW_OPENGL_ANY_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	//glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+
+#ifdef _DEBUG
+	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+#endif // DEBUG
+
 	myGLWindow = glfwCreateWindow(WIDTH, HEIGHT, "Main Window", nullptr, nullptr);
 	assert(myGLWindow != nullptr);
 	glfwSetWindowUserPointer(myGLWindow, this);
 	glfwSetWindowSizeCallback(myGLWindow, MainWindow::onWindowResized);
 
-	//glDebugMessageCallback(GLUtils::debugCallback, NULL);
-	/*glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, NULL, GL_TRUE);
-	glDebugMessageInsert(GL_DEBUG_SOURCE_APPLICATION, GL_DEBUG_TYPE_MARKER, 0,
-		GL_DEBUG_SEVERITY_NOTIFICATION, -1, "Start debugging");*/
 	glfwMakeContextCurrent(myGLWindow);
 	ogl_LoadFunctions();
+	
+	glDebugMessageCallback(GLUtils::debugCallback, NULL);
+	glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, NULL, GL_TRUE);
+	/*glDebugMessageInsert(GL_DEBUG_SOURCE_APPLICATION, GL_DEBUG_TYPE_MARKER, 0,
+		GL_DEBUG_SEVERITY_NOTIFICATION, -1, "Start debugging");*/
 
 	auto& systemGraphics = Graphics::OpenGLGraphics::getInstance();
 	systemGraphics.createNewScene(WIDTH, HEIGHT);
 	auto scene = systemGraphics.getScene();
 	m_ActiveScene = scene;
 	scene->init();
+	glViewport(0, 0, WIDTH, HEIGHT);
 }
 
 void MainWindow::myMainLoop()
@@ -60,6 +68,7 @@ void MainWindow::myMainLoop()
 	auto scene = m_ActiveScene.lock();
 	while (!glfwWindowShouldClose(myGLWindow))
 	{
+		glfwMakeContextCurrent(myGLWindow);
 		if (scene)
 			scene->render();
 		glfwSwapBuffers(myGLWindow);

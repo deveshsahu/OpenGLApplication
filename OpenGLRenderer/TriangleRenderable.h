@@ -30,6 +30,6 @@ namespace Graphics
 
 		GLuint m_vao;
 
-		GLSLProgram m_Program;
+		GLSLProgram mProgram;
 	};
 }//namespace Graphics

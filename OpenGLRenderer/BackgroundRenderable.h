@@ -1,5 +1,6 @@
 #pragma once
 #include "BaseRenderable.h"
+#include "GLSLProgram.h"
 namespace Graphics
 {
 
@@ -12,7 +13,10 @@ namespace Graphics
 		};
 	public:
 		BackgroundRenderable(const std::string & name);
+		bool init() override;
+		void drawBegin() override;
 		void draw() override;
+		void drawEnd() override;
 	private:
 		void m_updateVtx();
 		void m_updateTex();
@@ -22,5 +26,7 @@ namespace Graphics
 		GLuint m_vao;
 		GLuint m_vbo;
 		GLuint m_tex;
+
+		GLSLProgram mProgram;
 	};
 }

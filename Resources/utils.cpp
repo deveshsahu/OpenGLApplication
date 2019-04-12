@@ -25,6 +25,7 @@ namespace utils
 	uint8_t* loadImageFile(const std::string & file, int& width, int & height)
 	{
 		int bpp;
-		return stbi_load("file", &width, &height, &bpp, 3);
+		stbi_set_flip_vertically_on_load(true);
+		return stbi_load(file.c_str(), &width, &height, &bpp, 4);
 	}
 }

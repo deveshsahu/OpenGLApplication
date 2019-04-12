@@ -1,5 +1,7 @@
 #include "Scene.h"
+#include "GLUtils.h"
 #include "TriangleRenderable.h"
+#include "BackgroundRenderable.h"
 #include <iostream>
 namespace Graphics
 {
@@ -7,12 +9,13 @@ namespace Graphics
 		m_Width(width),
 		m_Height(height)
 	{
-		m_Renderables.push_back(std::make_shared<TriangleRenderable>("Triangle"));
+		//m_Renderables.push_back(std::make_shared<TriangleRenderable>("Triangle"));
+		m_Renderables.push_back(std::make_shared<BackgroundRenderable>("Background"));
 	}
 
 	void Scene::init()
 	{
-		glViewport(0, 0, m_Width, m_Height);
+		GLUtils::printInfo();
 		for (auto& renderable : m_Renderables)
 		{
 			if (!renderable->init())
@@ -36,7 +39,6 @@ namespace Graphics
 	{
 		m_Width = width;
 		m_Height = height;
-		glViewport(0, 0, width, height);
 	}
 
 	void Scene::dispose()
@@ -52,7 +54,6 @@ namespace Graphics
 	void Scene::m_BeginFrame()
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	}
 
 	void Scene::m_Draw()

@@ -15,9 +15,9 @@ namespace Graphics
 
 	bool TriangleRenderable::init()
 	{
-		m_Program.addShader("SimpleVertex");
-		m_Program.addShader("SimpleFragment");
-		if (!m_Program.createProgram())
+		mProgram.addShader("SimpleVertex");
+		mProgram.addShader("SimpleFragment");
+		if (!mProgram.createProgram())
 			return false;
 		updateVtx();
 		return true;
@@ -25,7 +25,7 @@ namespace Graphics
 
 	void TriangleRenderable::drawBegin()
 	{
-		m_Program.useProgram();
+		mProgram.useProgram();
 		glBindVertexArray(m_vao);
 	}
 
