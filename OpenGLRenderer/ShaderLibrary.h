@@ -5,32 +5,40 @@
 #include <memory>
 
 using namespace GLUtils;
-
-struct Shader
+namespace Graphics
 {
-	SHADER_TYPE m_type;
-	GLuint m_id;
-	std::string m_name;
-	Shader(GLuint id, SHADER_TYPE type, std::string name) :
-		m_type(type),
-		m_id(id),
-		m_name(name)
-	{}
-};
 
-using ShaderSPtr = std::shared_ptr<Shader>;
+	struct Shader
+	{
+		SHADER_TYPE m_type;
+		GLuint m_id;
+		std::string m_name;
+		Shader(GLuint id, SHADER_TYPE type, std::string name) :
+			m_type(type),
+			m_id(id),
+			m_name(name)
+		{}
+	};
 
-class ShaderLibrary
-{
-public:
-	ShaderLibrary();
-	~ShaderLibrary() = default;
+	/** Singleton Shader Library */
+	class ShaderLibrary
+	{
+	public:
+		~ShaderLibrary() = default;
+		ShaderLibrary(ShaderLibrary const&) = delete;
+		void operator=(ShaderLibrary const&) = delete;
 
-	void addShaderFromFile(const std::string& name, const std::string& filePath, SHADER_TYPE type);
-	ShaderSPtr getShader(const std::string& name);
+		/** @brief Accessor */
+		static ShaderLibrary& getInstance();
 
-	void initializeDefaultShaders();
+		void addShaderFromFile(const std::string& name, const std::string& filePath, SHADER_TYPE type);
+		std::shared_ptr<Shader> getShader(const std::string& name);
 
-private:
-	std::vector<ShaderSPtr> m_ShaderList;
-};
+		void initializeDefaultShaders();
+
+	private:
+		ShaderLibrary();
+
+		std::vector<std::shared_ptr<Shader>> m_ShaderList;
+	};
+}//namespace Graphics

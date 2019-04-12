@@ -1,35 +1,32 @@
 #pragma once
 #include "BaseRenderable.h"
 #include "GLSLProgram.h"
-
 namespace Graphics
 {
-	class TriangleRenderable : public BaseRenderable
+
+	class BackgroundRenderable : public BaseRenderable
 	{
-	public:
 		enum DIRTY
 		{
 			VTX = 1 << 0,
-			CLR = 1 << 1
+			TEX = 1 << 1
 		};
-
 	public:
-		TriangleRenderable(const std::string& name);
-		~TriangleRenderable();
-
+		BackgroundRenderable(const std::string & name);
 		bool init() override;
 		void drawBegin() override;
 		void draw() override;
 		void drawEnd() override;
-
-	protected:
-		void updateVtx();
+	private:
+		void m_updateVtx();
+		void m_updateTex();
 
 	private:
-		GLuint m_VtxBufferId, m_IdxBufferId;
-
+		std::string m_ImagePath="D:\\FirefoxDownloads\\image.jpg";
 		GLuint m_vao;
+		GLuint m_vbo;
+		GLuint m_tex;
 
 		GLSLProgram mProgram;
 	};
-}//namespace Graphics
+}

@@ -1,35 +1,29 @@
 #pragma once
 
-#include "ShaderLibrary.h"
-#include "TriangleRenderable.h"
 #include "glm/glm.hpp"
-#include <unordered_map>
+#include <vector>
+#include <memory>
 
 namespace Graphics
 {
+	class BaseRenderable;
+	class Scene;
 	class OpenGLGraphics
 	{
 	public:
-		
 		~OpenGLGraphics();
 		OpenGLGraphics(OpenGLGraphics const&) = delete;
 		void operator=(OpenGLGraphics const&) = delete;
 
 		static OpenGLGraphics& getInstance();
 
-		void initAllPrograms();
-		void init();
+		/*std::shared_ptr<Scene>*/void createNewScene(int width, int height);
 
-		void render();
-
-		void resize(int width, int height);
+		std::shared_ptr<Scene> getScene() { return m_Scene; }
 
 	private:
 		OpenGLGraphics();
 
-		GLuint m_InitProgram(std::vector<std::string>& shaderList);
-		std::unordered_map<std::string, GLuint> m_Programs;
-		ShaderLibrary m_ShaderLibrary;
-		TriangleRenderable m_Triangle;
+		std::shared_ptr<Scene> m_Scene;
 	};
 }
