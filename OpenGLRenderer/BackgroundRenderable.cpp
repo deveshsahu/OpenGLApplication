@@ -8,7 +8,12 @@ namespace Graphics
 	BackgroundRenderable::BackgroundRenderable(const std::string& name):
 		BaseRenderable(name)
 	{
-		setDirty(VTX | TEX);
+		setDirty(VTX);
+	}
+
+	void BackgroundRenderable::setInfo(const bkgInfo & info)
+	{
+		mInfo = info;
 	}
 
 	bool BackgroundRenderable::init()
@@ -17,9 +22,33 @@ namespace Graphics
 		mProgram.addShader("BackgroundFragment");
 		if (!mProgram.createProgram())
 			return false;
-		m_updateVtx();
-		m_updateTex();
-		
+
+		mUpdateVtx();
+
+		if (mInfo.type == bkgType::IMG)
+			mUpdateTex();
+
+		GLint blockSize;
+		auto program = mProgram.getProgramHandle();
+		GLuint blockIndex = glGetUniformBlockIndex(program, "bkgInfo");
+		glGetActiveUniformBlockiv(program, blockIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &blockSize);
+		GLubyte * blockBuffer;
+		blockBuffer = (GLubyte*)malloc(blockSize);
+
+		const GLchar* names[] = {"type", "color", "color2"};
+		GLuint indices[3];
+		glGetUniformIndices(program, 3, names, indices);
+		GLint offset[3];
+		glGetActiveUniformsiv(program, 3, indices, GL_UNIFORM_OFFSET, offset);
+
+		memcpy(blockBuffer + offset[0], &mInfo.type, sizeof(int));
+		memcpy(blockBuffer + offset[1], &mInfo.color, sizeof(float) * 4);
+		memcpy(blockBuffer + offset[2], &mInfo.color2, sizeof(float) * 4);
+
+		glGenBuffers(1, &mUniformBlock);
+		glBindBuffer(GL_UNIFORM_BUFFER, mUniformBlock);
+		glBufferData(GL_UNIFORM_BUFFER, blockSize, blockBuffer, GL_DYNAMIC_DRAW);
+
 		return true;
 	}
 
@@ -31,17 +60,21 @@ namespace Graphics
 
 	void BackgroundRenderable::draw()
 	{
+		glBindBufferBase(GL_UNIFORM_BUFFER, 1, mUniformBlock); // Binding point-> binding = 1
 		glBindVertexArray(m_vao);
-		glBindTexture(GL_TEXTURE_2D, m_tex);
+		if (mInfo.type == bkgType::IMG)
+			glBindTexture(GL_TEXTURE_2D, m_tex);
+		GLUtils::checkForOpenGLError(__FILE__, __LINE__);
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 		glBindVertexArray(0);
 	}
 
 	void BackgroundRenderable::drawEnd()
 	{
+		
 	}
 
-	void BackgroundRenderable::m_updateVtx()
+	void BackgroundRenderable::mUpdateVtx()
 	{
 		glGenVertexArrays(1, &m_vao);
 		glBindVertexArray(m_vao);
@@ -62,11 +95,11 @@ namespace Graphics
 		unsetDirty(VTX);
 	}
 
-	void BackgroundRenderable::m_updateTex()
+	void BackgroundRenderable::mUpdateTex()
 	{
 
 		int width = 512, height = 512;
-		auto data = utils::loadImageFile(m_ImagePath, width, height);
+		auto data = utils::loadImageFile(mInfo.filename, width, height);
 		if (data)
 		{
 			glActiveTexture(GL_TEXTURE0);
@@ -78,6 +111,11 @@ namespace Graphics
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 			free(data);
 		}
+		else
+			mInfo.type = bkgType::SOLID;
 		unsetDirty(TEX);
+	}
+	void BackgroundRenderable::mUploadInfo()
+	{
 	}
 }

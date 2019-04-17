@@ -2,6 +2,7 @@
 #include "Graphics.h"
 #include "Scene.h"
 #include "GLUtils.h"
+#include "TriangleRenderable.h"
 #include <assert.h>
 #include <iostream>
 
@@ -59,8 +60,9 @@ void MainWindow::myInitWindow()
 	systemGraphics.createNewScene(WIDTH, HEIGHT);
 	auto scene = systemGraphics.getScene();
 	m_ActiveScene = scene;
+	scene->addRenderable(std::make_shared <Graphics::TriangleRenderable>("Triangle") );
+	scene->addBackground("");
 	scene->init();
-	glViewport(0, 0, WIDTH, HEIGHT);
 }
 
 void MainWindow::myMainLoop()
