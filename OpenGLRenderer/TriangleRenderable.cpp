@@ -26,6 +26,7 @@ namespace Graphics
 	void TriangleRenderable::drawBegin()
 	{
 		mProgram.useProgram();
+		glBindBufferBase(GL_UNIFORM_BUFFER, 0, mViewMatrixUniformBufferID); // Bound to binding pt 0
 		glBindVertexArray(m_vao);
 	}
 
@@ -47,7 +48,7 @@ namespace Graphics
 		glGenBuffers(1, &m_VtxBufferId);
 		glBindBuffer(GL_ARRAY_BUFFER, m_VtxBufferId);
 		std::vector<glm::vec3> vtx = {
-			glm::vec3(-0.5, 0, 0), glm::vec3(0.5, 0, 0), glm::vec3(0, 0.5, 0)
+			glm::vec3(-0.5, 0, 0), glm::vec3(0.5, 0, 0), glm::vec3(0, 0.5, 0.0)
 		};
 		glBufferData(GL_ARRAY_BUFFER, vtx.size() * sizeof(glm::vec3), vtx.data(), GL_STATIC_DRAW);
 

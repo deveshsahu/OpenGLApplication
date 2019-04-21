@@ -1,6 +1,6 @@
 #version 450
 
-out vec4 outColorfs;
+layout (location = 0) out vec4 outColorfs;
 
 void main()
 {

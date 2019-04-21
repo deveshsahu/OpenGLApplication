@@ -13,6 +13,7 @@ namespace Graphics
 		bool createProgram();
 		void addShader(const std::string& shaderName);
 		void useProgram();
+		GLuint getProgramHandle() const;
 
 	private:
 		GLuint m_ProgramID = GLUtils::INVALID;

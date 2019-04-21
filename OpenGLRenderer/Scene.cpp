@@ -5,40 +5,78 @@
 #include <iostream>
 namespace Graphics
 {
-	Scene::Scene(int width, int height):
-		m_Width(width),
-		m_Height(height)
+	Scene::Scene(int width, int height) :
+		mWidth(width),
+		mHeight(height),
+		mModelRenderTarget(rtTargetFlag::RT_BOTH, width, height, 1),
+		mBackgroundRenderTarget(rtTargetFlag::RT_BOTH, width, height, 0)
 	{
-		//m_Renderables.push_back(std::make_shared<TriangleRenderable>("Triangle"));
-		m_Renderables.push_back(std::make_shared<BackgroundRenderable>("Background"));
 	}
 
 	void Scene::init()
 	{
 		GLUtils::printInfo();
-		for (auto& renderable : m_Renderables)
+		if (!mModelRenderTarget.create())
+		{
+			mInitFailed = true;
+			return;
+		}
+
+		mCamera.updateCamera();
+
+		auto vmat = mCamera.getViewMatrix();
+		auto vpmat = mCamera.getViewProjectionMatrix();
+		GLubyte * viewMatrixData = new GLubyte[128];
+		memcpy(viewMatrixData, &vmat[0][0], sizeof(glm::mat4));
+		memcpy(viewMatrixData + 64, &vpmat[0][0], sizeof(glm::mat4));
+
+		glGenBuffers(1, &mViewMatrixBuffer);
+		glBindBuffer(GL_UNIFORM_BUFFER, mViewMatrixBuffer);
+		glBufferData(GL_UNIFORM_BUFFER, 128, viewMatrixData, GL_DYNAMIC_DRAW);
+
+		for (auto& renderable : mRenderables)
 		{
 			if (!renderable->init())
 			{
 				std::cerr << "ERROR: Failed to initialize renderables!" << std::endl;
 				mInitFailed = true;
+				return;
+			}
+			renderable->setViewMatrixUniformBuffer(mViewMatrixBuffer);
+		}
+
+		if (mBackgroundRenderTarget.create())
+		{
+			if (!mBackgroundRenderable->init())
+			{
+				std::cerr << "ERROR: Failed to initialize background!" << std::endl;
+				mInitFailed = true;
 			}
 		}
+
+		// Initialize compositing program
+		mCompositingProgram.addShader("ResolveVertex");
+		mCompositingProgram.addShader("ResolveFragment");
+		if (!mCompositingProgram.createProgram())
+		{
+			std::cerr << "ERROR: Failed to create Compositing program!" << std::endl;
+		}
+		glGenVertexArrays(1, &mCompositingVao);
 	}
 
 	void Scene::render()
 	{
 		if (mInitFailed)
 			return;
-		m_BeginFrame();
-		m_Draw();
-		m_EndFrame();
+		mBeginFrame();
+		mDraw();
+		mEndFrame();
 	}
 
 	void Scene::resize(int width, int height)
 	{
-		m_Width = width;
-		m_Height = height;
+		mWidth = width;
+		mHeight = height;
 	}
 
 	void Scene::dispose()
@@ -46,19 +84,25 @@ namespace Graphics
 		
 	}
 
-	void Scene::addRenderable(std::shared_ptr<BaseRenderable>& renderable)
+	void Scene::addRenderable(std::shared_ptr<BaseRenderable> renderable)
 	{
-		m_Renderables.push_back(renderable);
+		mRenderables.push_back(renderable);
 	}
 
-	void Scene::m_BeginFrame()
+	void Scene::addBackground(const std::string filepath)
 	{
+		mBackgroundRenderable = std::make_shared<BackgroundRenderable>("Background");
+	}
+
+	void Scene::mBeginFrame()
+	{
+	}
+
+	void Scene::mDraw()
+	{
+		mModelRenderTarget.bind();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	}
-
-	void Scene::m_Draw()
-	{
-		for (auto& renderable : m_Renderables)
+		for (auto& renderable : mRenderables)
 		{
 			renderable->drawBegin();
 			renderable->draw();
@@ -66,8 +110,25 @@ namespace Graphics
 		}
 	}
 
-	void Scene::m_EndFrame()
+	void Scene::mEndFrame()
 	{
+		mBackgroundRenderTarget.bind();
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		mBackgroundRenderable->drawBegin();
+		mBackgroundRenderable->draw();
+		mBackgroundRenderable->drawEnd();
+		GLUtils::checkForOpenGLError(__FILE__, __LINE__);
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0); // Switch to default frame buffer
+		glViewport(0, 0, mWidth, mHeight);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		mCompositingProgram.useProgram();
+		glActiveTexture(GL_TEXTURE1);
+		mModelRenderTarget.bindColorTexture();
+		glActiveTexture(GL_TEXTURE0);
+		mBackgroundRenderTarget.bindColorTexture();
+		glBindVertexArray(mCompositingVao);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
 
 }

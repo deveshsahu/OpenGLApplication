@@ -28,4 +28,9 @@ namespace Graphics
 	{
 		glUseProgram(m_ProgramID);
 	}
+
+	GLuint GLSLProgram::getProgramHandle() const
+	{
+		return m_ProgramID;
+	}
 }//namespace Graphics

@@ -1,10 +1,15 @@
 #pragma once
+#include "RenderTarget.h"
+#include "GLSLProgram.h"
+#include "ViewMatrix.h"
+#include "Camera.h"
 #include <vector>
 #include <memory>
 
 namespace Graphics
 {
 	class BaseRenderable;
+	class BackgroundRenderable;
 	class Scene
 	{
 	public:
@@ -15,16 +20,30 @@ namespace Graphics
 		void resize(int width, int height);
 		void dispose();
 
-		void addRenderable(std::shared_ptr<BaseRenderable>& renderable);
+		void addRenderable(std::shared_ptr<BaseRenderable> renderable);
+		void addBackground(const std::string filepath);
 
 	protected:
-		void m_BeginFrame();
-		void m_Draw();
-		void m_EndFrame();
+
+		void mBeginFrame();
+		void mDraw();
+		void mEndFrame();
 
 	protected:
-		int m_Width = 0, m_Height = 0;
-		std::vector<std::shared_ptr<BaseRenderable>> m_Renderables;
+		int mWidth = 0, mHeight = 0;
+		std::vector<std::shared_ptr<BaseRenderable>> mRenderables;
+		std::shared_ptr<BackgroundRenderable> mBackgroundRenderable;
+
+		RenderTarget mModelRenderTarget;
+		RenderTarget mBackgroundRenderTarget;
+
+		Camera mCamera;
+		ViewMatrix mViewMatrix;
+
+		GLSLProgram mCompositingProgram;
+		GLuint mCompositingVao;
+
+		GLuint mViewMatrixBuffer;
 
 		bool mInitFailed = false;
 	};

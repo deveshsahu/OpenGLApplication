@@ -3,13 +3,13 @@
 layout (location = 0) in vec3 inVert;
 layout (location = 1) in vec4 inColor;
 
-// layout (binding = 2) uniform matrix
-// {
-	// mat4 mvp;
-	// mat4 mv;
-// }m_matrix;
+layout (std140, binding = 0) uniform ViewMatrix
+ {// Member						base alignment 			offset			aligned offset
+	mat4 view;               //	16						0				0
+	mat4 viewprojection;	 //	16						64				64
+ };
 
 void main()
 {
-	gl_Position = vec4(inVert, 1.0);
+	gl_Position = viewprojection * vec4(inVert, 1.0);
 }
