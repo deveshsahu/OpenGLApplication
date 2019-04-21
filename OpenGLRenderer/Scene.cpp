@@ -22,6 +22,18 @@ namespace Graphics
 			return;
 		}
 
+		mCamera.updateCamera();
+
+		auto vmat = mCamera.getViewMatrix();
+		auto vpmat = mCamera.getViewProjectionMatrix();
+		GLubyte * viewMatrixData = new GLubyte[128];
+		memcpy(viewMatrixData, &vmat[0][0], sizeof(glm::mat4));
+		memcpy(viewMatrixData + 64, &vpmat[0][0], sizeof(glm::mat4));
+
+		glGenBuffers(1, &mViewMatrixBuffer);
+		glBindBuffer(GL_UNIFORM_BUFFER, mViewMatrixBuffer);
+		glBufferData(GL_UNIFORM_BUFFER, 128, viewMatrixData, GL_DYNAMIC_DRAW);
+
 		for (auto& renderable : mRenderables)
 		{
 			if (!renderable->init())
@@ -30,6 +42,7 @@ namespace Graphics
 				mInitFailed = true;
 				return;
 			}
+			renderable->setViewMatrixUniformBuffer(mViewMatrixBuffer);
 		}
 
 		if (mBackgroundRenderTarget.create())

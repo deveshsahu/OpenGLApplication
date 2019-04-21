@@ -28,6 +28,8 @@ namespace Graphics
 
 		std::string getName() { return m_Name; }
 
+		void setViewMatrixUniformBuffer(GLuint bufferID) { mViewMatrixUniformBufferID = bufferID; }
+
 		void unsetDirty(int flag) { m_DirtyFlag &= ~flag; }
 		void setDirty(int flag) { m_DirtyFlag |= flag; }
 		bool isDirty(int flag) { return m_DirtyFlag & flag; }
@@ -35,5 +37,6 @@ namespace Graphics
 	protected:
 		std::string m_Name;
 		size_t m_DirtyFlag = 0;
+		GLuint mViewMatrixUniformBufferID = ~0;
 	};
 }// namespace Graphics

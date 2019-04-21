@@ -6,7 +6,7 @@ in VS_OUT
 }fs_in;
 
 layout (binding = 0) uniform sampler2D bkgImage;
-layout (binding = 1) uniform bkgInfo {
+uniform bkgInfo {
 	int type;
 	vec4 color;
 	vec4 color2;

@@ -57,6 +57,9 @@
     <ClCompile Include="Texture.cpp">
       <Filter>Core\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Core\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseRenderable.h">
@@ -96,6 +99,12 @@
       <Filter>Core\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Texture.h">
+      <Filter>Core\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ViewMatrix.h">
+      <Filter>Core\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
       <Filter>Core\Header Files</Filter>
     </ClInclude>
   </ItemGroup>

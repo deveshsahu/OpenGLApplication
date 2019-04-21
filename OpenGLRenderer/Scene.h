@@ -1,6 +1,8 @@
 #pragma once
 #include "RenderTarget.h"
-#include "GLSLProgram.h"	
+#include "GLSLProgram.h"
+#include "ViewMatrix.h"
+#include "Camera.h"
 #include <vector>
 #include <memory>
 
@@ -35,8 +37,13 @@ namespace Graphics
 		RenderTarget mModelRenderTarget;
 		RenderTarget mBackgroundRenderTarget;
 
+		Camera mCamera;
+		ViewMatrix mViewMatrix;
+
 		GLSLProgram mCompositingProgram;
 		GLuint mCompositingVao;
+
+		GLuint mViewMatrixBuffer;
 
 		bool mInitFailed = false;
 	};

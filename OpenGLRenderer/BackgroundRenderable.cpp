@@ -32,8 +32,7 @@ namespace Graphics
 		auto program = mProgram.getProgramHandle();
 		GLuint blockIndex = glGetUniformBlockIndex(program, "bkgInfo");
 		glGetActiveUniformBlockiv(program, blockIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &blockSize);
-		GLubyte * blockBuffer;
-		blockBuffer = (GLubyte*)malloc(blockSize);
+		GLubyte * blockBuffer = (GLubyte*)malloc(blockSize);
 
 		const GLchar* names[] = {"type", "color", "color2"};
 		GLuint indices[3];
@@ -102,7 +101,7 @@ namespace Graphics
 		auto data = utils::loadImageFile(mInfo.filename, width, height);
 		if (data)
 		{
-			glActiveTexture(GL_TEXTURE0);
+			glActiveTexture(GL_TEXTURE0); // sampler refers to bindin 0
 			glGenTextures(1, &m_tex);
 			glBindTexture(GL_TEXTURE_2D, m_tex);
 			glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGBA8, width, height);
