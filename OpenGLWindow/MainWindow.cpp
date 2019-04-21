@@ -9,20 +9,32 @@
 static const int WIDTH = 800;
 static const int HEIGHT = 600;
 
-std::weak_ptr<Graphics::Scene> MainWindow::m_ActiveScene;
+std::weak_ptr<Graphics::Scene> MainWindow::mActiveScene;
 
 void MainWindow::run()
 {
-	myInitWindow();
-	myMainLoop();
-	myCleanup();
+	mInitWindow();
+	mMainLoop();
+	mCleanup();
 }
 
 void MainWindow::onWindowResized(GLFWwindow * window, int width, int height)
 {
 	glViewport(0, 0, width, height);
-	if (auto scene = m_ActiveScene.lock())
+	if (auto scene = mActiveScene.lock())
 		scene->resize(width, height);
+}
+
+void MainWindow::onCursorMove(GLFWwindow *, double xpos, double ypos)
+{
+}
+
+void MainWindow::onMouseButton(GLFWwindow *, int button, int action, int mods)
+{
+}
+
+void MainWindow::onMouseScroll(GLFWwindow *, double, double)
+{
 }
 
 void MainWindow::onCheckError(int error, const char * description)
@@ -30,7 +42,7 @@ void MainWindow::onCheckError(int error, const char * description)
 	std::cout << "ERROR: " << description << std::endl;
 }
 
-void MainWindow::myInitWindow()
+void MainWindow::mInitWindow()
 {
 	glfwSetErrorCallback(onCheckError);
 	if (!glfwInit())
@@ -43,12 +55,18 @@ void MainWindow::myInitWindow()
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 #endif // DEBUG
 
-	myGLWindow = glfwCreateWindow(WIDTH, HEIGHT, "Main Window", nullptr, nullptr);
-	assert(myGLWindow != nullptr);
-	glfwSetWindowUserPointer(myGLWindow, this);
-	glfwSetWindowSizeCallback(myGLWindow, MainWindow::onWindowResized);
+	mGLWindow = glfwCreateWindow(WIDTH, HEIGHT, "Main Window", nullptr, nullptr);
+	assert(mGLWindow != nullptr);
+	glfwSetWindowUserPointer(mGLWindow, this);
+	// Window Resize
+	glfwSetWindowSizeCallback(mGLWindow, MainWindow::onWindowResized);
+	// Mouse Move
+	glfwSetCursorPosCallback(mGLWindow, MainWindow::onMouseMove);
+	// Mouse button
+	glfwSetMouseButtonCallback(mGLWindow, MainWindow::onMouseButton);
+	
 
-	glfwMakeContextCurrent(myGLWindow);
+	glfwMakeContextCurrent(mGLWindow);
 	ogl_LoadFunctions();
 	
 	glDebugMessageCallback(GLUtils::debugCallback, NULL);
@@ -59,28 +77,27 @@ void MainWindow::myInitWindow()
 	auto& systemGraphics = Graphics::OpenGLGraphics::getInstance();
 	systemGraphics.createNewScene(WIDTH, HEIGHT);
 	auto scene = systemGraphics.getScene();
-	m_ActiveScene = scene;
 	scene->addRenderable(std::make_shared <Graphics::TriangleRenderable>("Triangle") );
-	scene->addBackground("");
+	scene->addBackground("Solid Background");
 	scene->init();
+	mActiveScene = scene;
 }
 
-void MainWindow::myMainLoop()
+void MainWindow::mMainLoop()
 {
-	auto scene = m_ActiveScene.lock();
-	while (!glfwWindowShouldClose(myGLWindow))
+	auto scene = mActiveScene.lock();
+	while (!glfwWindowShouldClose(mGLWindow))
 	{
-		glfwMakeContextCurrent(myGLWindow);
+		glfwMakeContextCurrent(mGLWindow);
 		if (scene)
 			scene->render();
-		glfwSwapBuffers(myGLWindow);
+		glfwSwapBuffers(mGLWindow);
 		glfwWaitEvents();
 	}
-
 }
 
-void MainWindow::myCleanup()
+void MainWindow::mCleanup()
 {
-	glfwDestroyWindow(myGLWindow);
+	glfwDestroyWindow(mGLWindow);
 	glfwTerminate();
 }

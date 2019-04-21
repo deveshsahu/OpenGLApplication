@@ -17,16 +17,18 @@ public:
 
 	void run();
 
-	static void onWindowResized(GLFWwindow*, int, int);
 	static void onCheckError(int error, const char* description);
+	static void onWindowResized(GLFWwindow*, int, int);
+	static void onMouseMove(GLFWwindow*, double, double);
+	static void onMouseButton(GLFWwindow*, int, int, int);
+	static void onMouseScroll(GLFWwindow*, double, double);
 private:
-	void myInitWindow();
-	void myMainLoop();
-	void myCleanup();
+	void mInitWindow();
+	void mMainLoop();
+	void mCleanup();
 
 private:
-	GLFWwindow* myGLWindow;
-	//static std::unordered_map<GLFWwindow*, Graphics::
-	static std::weak_ptr<Graphics::Scene> m_ActiveScene;
+	GLFWwindow* mGLWindow;
+	static std::weak_ptr<Graphics::Scene> mActiveScene;
 };
 
