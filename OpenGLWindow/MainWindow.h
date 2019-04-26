@@ -17,11 +17,13 @@ public:
 
 	void run();
 
+	// Glfw Callbacks
 	static void onCheckError(int error, const char* description);
 	static void onWindowResized(GLFWwindow*, int, int);
 	static void onMouseMove(GLFWwindow*, double, double);
 	static void onMouseButton(GLFWwindow*, int, int, int);
 	static void onMouseScroll(GLFWwindow*, double, double);
+
 private:
 	void mInitWindow();
 	void mMainLoop();

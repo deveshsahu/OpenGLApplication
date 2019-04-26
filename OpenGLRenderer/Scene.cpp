@@ -2,6 +2,7 @@
 #include "GLUtils.h"
 #include "TriangleRenderable.h"
 #include "BackgroundRenderable.h"
+#include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 namespace Graphics
 {
@@ -79,6 +80,68 @@ namespace Graphics
 		mHeight = height;
 	}
 
+	void Scene::mouseMove(double xpos, double ypos)
+	{
+		if (mLeftMousePressed)
+		{
+			if (mModifier == Modifier::modCtrl)
+			{
+				double deltax = (xpos - mInitialLocation.x) * 0.001,
+					deltay = -(ypos - mInitialLocation.y) * 0.001;
+				mModelMatrix = glm::translate(glm::mat4(1.f), glm::vec3((float)deltax, (float)deltay, 0.f)) * mModelMatrix;
+				mInitialLocation.x = xpos;
+				mInitialLocation.y = ypos;
+				mUploadViewMatrix();
+			}
+			else
+			{
+				double deltax = (xpos - mInitialLocation.x) * 0.1 * 3.14 / 180.0;
+				double deltay = (ypos - mInitialLocation.y) * 0.1 * 3.14 / 180.0;
+				mModelMatrix = glm::rotate(glm::mat4(1.f), (float)deltax, glm::vec3(0, 1, 0)) * mModelMatrix;
+				mModelMatrix = glm::rotate(glm::mat4(1.f), (float)deltay, glm::vec3(1, 0, 0)) * mModelMatrix;
+				mInitialLocation.x = xpos;
+				mInitialLocation.y = ypos;
+				mUploadViewMatrix();
+			}
+		}
+	}
+
+	void Scene::mouseButton(MouseButtonEvent evt)
+	{
+		switch (evt.button)
+		{
+		case Graphics::mbLeft:
+		{
+			if (evt.state == ButtonState::bsPressed)
+			{
+				mLeftMousePressed = true;
+				mModifier = evt.mods;
+				mInitialLocation.x = evt.xpos;
+				mInitialLocation.y = evt.ypos;
+			}
+			else if (evt.state == ButtonState::bsReleased)
+			{
+				mLeftMousePressed = false;
+				mModifier = Modifier::modInvalid;
+			}
+		}
+			break;
+		case Graphics::mbRight:
+			break;
+		case Graphics::mbMiddle:
+			break;
+		default:
+			break;
+		}
+	}
+
+	void Scene::mouseScroll(double xoffset, double yoffset)
+	{
+		float scale = yoffset > 0 ? 1.f / 0.9f : 0.9f;
+		mModelMatrix = glm::scale(glm::mat4(1.f), glm::vec3(scale)) * mModelMatrix;
+		mUploadViewMatrix();
+	}
+
 	void Scene::dispose()
 	{
 		
@@ -92,6 +155,17 @@ namespace Graphics
 	void Scene::addBackground(const std::string filepath)
 	{
 		mBackgroundRenderable = std::make_shared<BackgroundRenderable>("Background");
+	}
+
+	void Scene::mUploadViewMatrix()
+	{
+		auto vmat = mCamera.getViewMatrix() * mModelMatrix;
+		auto vpmat = mCamera.getViewProjectionMatrix() * mModelMatrix;
+		GLubyte * viewMatrixData = new GLubyte[128];
+		memcpy(viewMatrixData, &vmat[0][0], sizeof(glm::mat4));
+		memcpy(viewMatrixData + 64, &vpmat[0][0], sizeof(glm::mat4));
+		glBindBuffer(GL_UNIFORM_BUFFER, mViewMatrixBuffer);
+		glBufferSubData(GL_UNIFORM_BUFFER, 0, 128, viewMatrixData);
 	}
 
 	void Scene::mBeginFrame()

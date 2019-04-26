@@ -3,6 +3,7 @@
 #include "Scene.h"
 #include "GLUtils.h"
 #include "TriangleRenderable.h"
+#include "MouseEvent.h"
 #include <assert.h>
 #include <iostream>
 
@@ -25,16 +26,73 @@ void MainWindow::onWindowResized(GLFWwindow * window, int width, int height)
 		scene->resize(width, height);
 }
 
-void MainWindow::onCursorMove(GLFWwindow *, double xpos, double ypos)
+void MainWindow::onMouseMove(GLFWwindow * w, double xpos, double ypos)
 {
+	if (!w)
+		return;
+	if (auto scene = mActiveScene.lock())
+		scene->mouseMove(xpos, ypos);
 }
 
-void MainWindow::onMouseButton(GLFWwindow *, int button, int action, int mods)
+void MainWindow::onMouseButton(GLFWwindow * w, int button, int action, int mods)
 {
+	if (!w)
+		return;
+
+	Graphics::MouseButtonEvent evt;
+	glfwGetCursorPos(w, &evt.xpos, &evt.ypos);
+
+	switch (button)
+	{
+	case GLFW_MOUSE_BUTTON_LEFT:
+		evt.button = Graphics::MouseButton::mbLeft;
+		break;
+	case GLFW_MOUSE_BUTTON_RIGHT:
+		evt.button = Graphics::MouseButton::mbRight;
+		break;
+	case GLFW_MOUSE_BUTTON_MIDDLE:
+		evt.button = Graphics::MouseButton::mbMiddle;
+		break;
+	}
+	switch (action)
+	{
+	case GLFW_PRESS:
+		evt.state = Graphics::ButtonState::bsPressed;
+		break;
+	case GLFW_RELEASE:
+		evt.state = Graphics::ButtonState::bsReleased;
+		break;
+	default:
+		break;
+	}
+
+	switch (mods)
+	{
+	case GLFW_MOD_CONTROL:
+		evt.mods = Graphics::Modifier::modCtrl;
+		break;
+	case GLFW_MOD_ALT:
+		evt.mods = Graphics::Modifier::modAlt;
+		break;
+	case GLFW_MOD_SHIFT:
+		evt.mods = Graphics::Modifier::modShift;
+		break;
+	default:
+		evt.mods = Graphics::Modifier::modInvalid;
+	}
+
+	if (auto scene = mActiveScene.lock())
+	{
+		scene->mouseButton(evt);
+	}
 }
 
-void MainWindow::onMouseScroll(GLFWwindow *, double, double)
+void MainWindow::onMouseScroll(GLFWwindow * w, double xoffset, double yoffset)
 {
+	if (!w)
+		return;
+	if (auto scene = mActiveScene.lock())
+		scene->mouseScroll(xoffset, yoffset);
 }
 
 void MainWindow::onCheckError(int error, const char * description)
@@ -64,15 +122,17 @@ void MainWindow::mInitWindow()
 	glfwSetCursorPosCallback(mGLWindow, MainWindow::onMouseMove);
 	// Mouse button
 	glfwSetMouseButtonCallback(mGLWindow, MainWindow::onMouseButton);
+	// Mouse scroll
+	glfwSetScrollCallback(mGLWindow, MainWindow::onMouseScroll);
 	
 
 	glfwMakeContextCurrent(mGLWindow);
 	ogl_LoadFunctions();
 	
+#ifdef _DEBUG
 	glDebugMessageCallback(GLUtils::debugCallback, NULL);
 	glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, NULL, GL_TRUE);
-	/*glDebugMessageInsert(GL_DEBUG_SOURCE_APPLICATION, GL_DEBUG_TYPE_MARKER, 0,
-		GL_DEBUG_SEVERITY_NOTIFICATION, -1, "Start debugging");*/
+#endif // _DEBUG
 
 	auto& systemGraphics = Graphics::OpenGLGraphics::getInstance();
 	systemGraphics.createNewScene(WIDTH, HEIGHT);

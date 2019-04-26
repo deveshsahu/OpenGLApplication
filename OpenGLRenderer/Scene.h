@@ -2,6 +2,7 @@
 #include "RenderTarget.h"
 #include "GLSLProgram.h"
 #include "ViewMatrix.h"
+#include "MouseEvent.h"
 #include "Camera.h"
 #include <vector>
 #include <memory>
@@ -17,13 +18,20 @@ namespace Graphics
 		
 		void init();
 		void render();
-		void resize(int width, int height);
 		void dispose();
 
 		void addRenderable(std::shared_ptr<BaseRenderable> renderable);
 		void addBackground(const std::string filepath);
 
+		///////// EVENTS //////////////////////
+		void resize(int width, int height);
+		void mouseMove(double xpos, double ypos);
+		void mouseButton(MouseButtonEvent evt);
+		void mouseScroll(double xoffset, double yoffset);
+
 	protected:
+
+		void mUploadViewMatrix();
 
 		void mBeginFrame();
 		void mDraw();
@@ -45,6 +53,12 @@ namespace Graphics
 
 		GLuint mViewMatrixBuffer;
 
+		glm::mat4 mModelMatrix;
+
 		bool mInitFailed = false;
+
+		bool mLeftMousePressed = false;
+		glm::dvec2 mInitialLocation;
+		int mModifier;
 	};
 }

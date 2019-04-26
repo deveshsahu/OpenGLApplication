@@ -6,7 +6,7 @@ namespace Graphics
 	Camera::Camera(int projectionType):
 		mProjectionType(projectionType)
 	{
-		mEyePos = glm::vec3(0, 0, 1);
+		mEyePos = glm::vec3(0, 0, 5);
 		mCenter = glm::vec3(0, 0, 0);
 		mUp = glm::vec3(0, 1, 0);
 	}
