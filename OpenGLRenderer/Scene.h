@@ -49,9 +49,9 @@ namespace Graphics
 		ViewMatrix mViewMatrix;
 
 		GLSLProgram mCompositingProgram;
-		GLuint mCompositingVao;
+		GLuint mCompositingVao = ~0;
 
-		GLuint mViewMatrixBuffer;
+		GLuint mViewMatrixBuffer = ~0;
 
 		glm::mat4 mModelMatrix;
 
@@ -59,6 +59,6 @@ namespace Graphics
 
 		bool mLeftMousePressed = false;
 		glm::dvec2 mInitialLocation;
-		int mModifier;
+		int mModifier = Modifier::modInvalid;
 	};
 }

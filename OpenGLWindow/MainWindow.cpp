@@ -137,7 +137,29 @@ void MainWindow::mInitWindow()
 	auto& systemGraphics = Graphics::OpenGLGraphics::getInstance();
 	systemGraphics.createNewScene(WIDTH, HEIGHT);
 	auto scene = systemGraphics.getScene();
-	scene->addRenderable(std::make_shared <Graphics::TriangleRenderable>("Triangle") );
+	std::vector<glm::vec3> vtx;
+	vtx.push_back(glm::vec3(0, 0.288, 0));
+	vtx.push_back(glm::vec3(0, -0.1445, 0.289));
+	vtx.push_back(glm::vec3(0.25, -0.1445, -0.1445));
+	vtx.push_back(glm::vec3(-0.25, -0.1445, -0.1445));
+	std::vector<unsigned int> idx;
+	idx.push_back(0);
+	idx.push_back(1);
+	idx.push_back(2);
+	
+	idx.push_back(0);
+	idx.push_back(2);
+	idx.push_back(3);
+	
+	idx.push_back(0);
+	idx.push_back(3);
+	idx.push_back(1);
+	
+	idx.push_back(1);
+	idx.push_back(3);
+	idx.push_back(2);
+	
+	scene->addRenderable(std::make_shared <Graphics::TriangleRenderable>("Tetrahedra", vtx, idx) );
 	scene->addBackground("Solid Background");
 	scene->init();
 	mActiveScene = scene;

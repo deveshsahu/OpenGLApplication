@@ -1,6 +1,5 @@
 #include "Scene.h"
 #include "GLUtils.h"
-#include "TriangleRenderable.h"
 #include "BackgroundRenderable.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
@@ -63,6 +62,9 @@ namespace Graphics
 			std::cerr << "ERROR: Failed to create Compositing program!" << std::endl;
 		}
 		glGenVertexArrays(1, &mCompositingVao);
+
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK); // Discard back face
 	}
 
 	void Scene::render()

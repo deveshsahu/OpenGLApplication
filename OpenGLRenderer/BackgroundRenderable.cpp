@@ -83,9 +83,9 @@ namespace Graphics
 
 		std::vector<glm::vec2> data = {
 			glm::vec2(-1, -1),
-			glm::vec2(-1, 1),
-			glm::vec2(1, -1),
-			glm::vec2(1, 1)
+			glm::vec2( 1, -1),
+			glm::vec2(-1,  1),
+			glm::vec2( 1, 1)
 		};
 		glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(glm::vec2), data.data(), GL_STATIC_DRAW);
 
