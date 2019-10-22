@@ -4,33 +4,36 @@
 #include <memory>
 #include <unordered_map>
 
-namespace Graphics
+namespace model
 {
-	class Scene;
+	class Model;
 }
 
-class MainWindow
+namespace controller
 {
-public:
-	MainWindow() = default;
-	~MainWindow() = default;
+	class MainWindow
+	{
+	public:
+		MainWindow() = default;
+		~MainWindow() = default;
 
-	void run();
+		void run();
 
-	// Glfw Callbacks
-	static void onCheckError(int error, const char* description);
-	static void onWindowResized(GLFWwindow*, int, int);
-	static void onMouseMove(GLFWwindow*, double, double);
-	static void onMouseButton(GLFWwindow*, int, int, int);
-	static void onMouseScroll(GLFWwindow*, double, double);
+		// Glfw Callbacks
+		static void onCheckError(int error, const char* description);
+		static void onWindowResized(GLFWwindow*, int, int);
+		static void onMouseMove(GLFWwindow*, double, double);
+		static void onMouseButton(GLFWwindow*, int, int, int);
+		static void onMouseScroll(GLFWwindow*, double, double);
 
-private:
-	void mInitWindow();
-	void mMainLoop();
-	void mCleanup();
+	private:
+		void mInitWindow();
+		void mMainLoop();
+		void mCleanup();
 
-private:
-	GLFWwindow* mGLWindow;
-	static std::weak_ptr<Graphics::Scene> mActiveScene;
-};
+	private:
+		GLFWwindow* mGLWindow;
+		model::Model* mModel;
+	};
+}
 

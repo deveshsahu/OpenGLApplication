@@ -13,38 +13,27 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Resources">
-      <UniqueIdentifier>{63a540e8-843f-4924-85e0-23e75a44b167}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="resource.h">
+    <ClInclude Include="GLTFModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\Resources\utils.h">
-      <Filter>Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="MainWindow.h">
+    <ClInclude Include="Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SceneView.h">
+    <ClInclude Include="TeapotModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Resources\utils.cpp">
-      <Filter>Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="MainWindow.cpp">
+    <ClCompile Include="GLTFModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Application.cpp">
+    <ClCompile Include="Model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="OpenGLWindow.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
+    <ClCompile Include="TeapotModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

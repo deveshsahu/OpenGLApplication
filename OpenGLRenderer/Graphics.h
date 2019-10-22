@@ -2,6 +2,7 @@
 
 #include "glm/glm.hpp"
 #include <vector>
+#include <string>
 #include <memory>
 
 namespace Graphics
@@ -18,12 +19,13 @@ namespace Graphics
 		static OpenGLGraphics& getInstance();
 
 		/*std::shared_ptr<Scene>*/void createNewScene(int width, int height);
+		void createSceneFromFile(const std::string& filename, int width, int height);
 
-		std::shared_ptr<Scene> getScene() { return m_Scene; }
+		void render();
 
 	private:
 		OpenGLGraphics();
 
-		std::shared_ptr<Scene> m_Scene;
+		std::shared_ptr<Scene> mScene;
 	};
 }

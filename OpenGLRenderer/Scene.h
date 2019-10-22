@@ -6,6 +6,7 @@
 #include "Camera.h"
 #include <vector>
 #include <memory>
+#include <string>
 
 namespace Graphics
 {
@@ -15,6 +16,7 @@ namespace Graphics
 	{
 	public:
 		Scene(int width, int height);
+		Scene(const std::string& filename, int width, int height);
 		
 		void init();
 		void render();

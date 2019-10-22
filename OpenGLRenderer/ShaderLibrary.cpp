@@ -4,6 +4,7 @@
 
 namespace Graphics
 {
+	using namespace GLUtils;
 	ShaderLibrary & ShaderLibrary::getInstance()
 	{
 		static ShaderLibrary shaderLibrary;

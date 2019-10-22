@@ -1,7 +1,7 @@
 #pragma once
 #include "utils.h"
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+//#define STB_IMAGE_IMPLEMENTATION
+//#include "stb_image.h"
 #include <fstream>
 
 namespace utils
@@ -24,8 +24,9 @@ namespace utils
 
 	uint8_t* loadImageFile(const std::string & file, int& width, int & height)
 	{
-		int bpp;
+		/*int bpp;
 		stbi_set_flip_vertically_on_load(true);
-		return stbi_load(file.c_str(), &width, &height, &bpp, 4);
+		return stbi_load(file.c_str(), &width, &height, &bpp, 4);*/
+		return nullptr;
 	}
 }

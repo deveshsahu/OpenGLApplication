@@ -4,16 +4,15 @@
 #include <string>
 #include <memory>
 
-using namespace GLUtils;
 namespace Graphics
 {
 
 	struct Shader
 	{
-		SHADER_TYPE m_type;
+		GLUtils::SHADER_TYPE m_type;
 		GLuint m_id;
 		std::string m_name;
-		Shader(GLuint id, SHADER_TYPE type, std::string name) :
+		Shader(GLuint id, GLUtils::SHADER_TYPE type, std::string name) :
 			m_type(type),
 			m_id(id),
 			m_name(name)
@@ -31,7 +30,7 @@ namespace Graphics
 		/** @brief Accessor */
 		static ShaderLibrary& getInstance();
 
-		void addShaderFromFile(const std::string& name, const std::string& filePath, SHADER_TYPE type);
+		void addShaderFromFile(const std::string& name, const std::string& filePath, GLUtils::SHADER_TYPE type);
 		std::shared_ptr<Shader> getShader(const std::string& name);
 
 		void initializeDefaultShaders();

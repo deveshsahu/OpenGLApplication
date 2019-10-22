@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <string>
 namespace utils
 {
 	std::vector<char> loadFile(const std::string& fileName);

@@ -13,6 +13,15 @@ namespace Graphics
 	{
 	}
 
+	Scene::Scene(const std::string& filename, int width, int height):
+		mWidth(width),
+		mHeight(height),
+		mModelRenderTarget(rtTargetFlag::RT_BOTH, width, height, 1),
+		mBackgroundRenderTarget(rtTargetFlag::RT_BOTH, width, height, 0)
+	{
+		
+	}
+
 	void Scene::init()
 	{
 		GLUtils::printInfo();
@@ -168,6 +177,7 @@ namespace Graphics
 		memcpy(viewMatrixData + 64, &vpmat[0][0], sizeof(glm::mat4));
 		glBindBuffer(GL_UNIFORM_BUFFER, mViewMatrixBuffer);
 		glBufferSubData(GL_UNIFORM_BUFFER, 0, 128, viewMatrixData);
+		delete[] viewMatrixData;
 	}
 
 	void Scene::mBeginFrame()
