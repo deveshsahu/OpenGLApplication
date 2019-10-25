@@ -7,4 +7,16 @@ namespace model
 	{
 		return fl::GLTFLoader::getInstance().loadFromFile(filepath);
 	}
+
+	bool GLTFModel::configureScene()
+	{
+		// Camera
+		// Mesh
+		// Buffers
+		// Materials
+
+		return false;
+	}
+
+
 }

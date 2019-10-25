@@ -134,12 +134,10 @@
   <ItemGroup>
     <ClInclude Include="GLTFModel.h" />
     <ClInclude Include="Model.h" />
-    <ClInclude Include="TeapotModel.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GLTFModel.cpp" />
     <ClCompile Include="Model.cpp" />
-    <ClCompile Include="TeapotModel.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
