@@ -1,11 +1,6 @@
 #pragma once
 #include "Model.h"
-
 #include <memory>
-namespace Graphics
-{
-	class Scene;
-}
 
 namespace model
 {
@@ -13,8 +8,8 @@ namespace model
 	{
 	public:
 		bool load(const std::string& filepath) override;
-		bool configureScene();
+
 	private:
-		std::shared_ptr<Graphics::Scene> mModelScene;
+		std::shared_ptr<sg::Node> mModelSceneGraphRoot;
 	};
 }

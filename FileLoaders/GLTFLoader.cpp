@@ -19,6 +19,9 @@
 #define STBI_MSC_SECURE_CRT
 #endif
 #include "tiny_gltf.h"
+
+#include "SceneGraphCameraNode.h"
+
 namespace fl
 {
 	GLTFLoader& GLTFLoader::getInstance()
@@ -31,9 +34,9 @@ namespace fl
 		std::string err;
 		std::string warn;
 		tinygltf::TinyGLTF loader;
-		mtinygltfModel = new tinygltf::Model();
+		mTinygltfModel = new tinygltf::Model();
 		// Check file extension to check if it is binary or ascii
-		if (!loader.LoadBinaryFromFile(mtinygltfModel, &err, &warn, filepath))
+		if (!loader.LoadBinaryFromFile(mTinygltfModel, &err, &warn, filepath))
 			//mLoader.LoadASCIIFromFile(&model, &err, &warn, filename)
 		{
 			if (!warn.empty()) {
@@ -46,6 +49,21 @@ namespace fl
 			return false;
 		}
 		return true;
+	}
+
+	void GLTFLoader::configureScenegraph()
+	{
+		for (auto& cam : mTinygltfModel->cameras)
+		{
+			if (cam.type == "perspective")
+			{
+				auto camera = std::make_shared<sg::PerspectiveCameraNode>(cam.perspective.aspectRatio, cam.perspective.yfov, cam.perspective.zfar, cam.perspective.znear, cam.name);
+			}
+			else
+			{
+				auto camera = std::make_shared<sg::OrthographicCameraNode>(cam.orthographic.xmag, cam.orthographic.ymag, cam.orthographic.zfar, cam.orthographic.znear, cam.name);
+			}
+		}
 	}
 
 	GLTFLoader::GLTFLoader()

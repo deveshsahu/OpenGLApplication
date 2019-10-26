@@ -111,7 +111,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>%(SolutionDir)..\DataModel;%(SolutionDir)..\OpenGLRenderer;%(SolutionDir)..\Libraries\OpenGL;%(SolutionDir)..\Libraries\tiny_gltf;%(SolutionDir)..\Libraries\glm-0.9.8.5\glm;%(SolutionDir)..\Libraries\glfw-3.2.1.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(SolutionDir)..\FileLoaders;%(SolutionDir)..\DataModel;%(SolutionDir)..\OpenGLRenderer;%(SolutionDir)..\Libraries\OpenGL;%(SolutionDir)..\Libraries\tiny_gltf;%(SolutionDir)..\Libraries\glm-0.9.8.5\glm;%(SolutionDir)..\Libraries\glfw-3.2.1.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalUsingDirectories>%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
@@ -158,7 +158,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>%(SolutionDir)..\DataModel;%(SolutionDir)..\OpenGLRenderer;%(SolutionDir)..\Libraries\OpenGL;%(SolutionDir)..\Libraries\tiny_gltf;%(SolutionDir)..\Libraries\glm-0.9.8.5\glm;%(SolutionDir)..\Libraries\glfw-3.2.1.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(SolutionDir)..\FileLoaders;%(SolutionDir)..\DataModel;%(SolutionDir)..\OpenGLRenderer;%(SolutionDir)..\Libraries\OpenGL;%(SolutionDir)..\Libraries\tiny_gltf;%(SolutionDir)..\Libraries\glm-0.9.8.5\glm;%(SolutionDir)..\Libraries\glfw-3.2.1.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
